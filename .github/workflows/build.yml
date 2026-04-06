@@ -1,4 +1,3 @@
-
 name: Build APK
 
 on:
@@ -10,23 +9,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: Set up JDK 17
+      - name: Set up JDK
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Install Gradle
-        run: |
-          wget https://services.gradle.org/distributions/gradle-8.7-bin.zip
-          unzip gradle-8.7-bin.zip
-          export PATH=$PWD/gradle-8.7/bin:$PATH
-          gradle -v
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
 
       - name: Build APK
-        run: gradle assembleDebug
+        run: ./gradlew assembleDebug || gradle assembleDebug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
